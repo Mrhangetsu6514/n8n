@@ -1,9 +1,3 @@
-
-Gemini said
-The file extension for a README must be .md (which stands for Markdown). GitHub automatically renders these files into a professional, formatted webpage for your repository.
-
-Based on your repository structure and the infrastructure you've built, here is a high-impact README.md drafted to catch the attention of technical recruiters.
-
 n8n Property Pipeline Infrastructure
 This repository contains the containerized infrastructure and automated data pipeline for Matzati.casa. It utilizes a microservices architecture to ingest, process, and persist real estate listing data from external sources into a structured PostgreSQL database.
 

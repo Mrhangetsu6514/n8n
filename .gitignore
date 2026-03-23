@@ -1,0 +1,10 @@
+﻿# Ignore the actual environment variables
+.env
+
+# Ignore any local data folders if you use bind mounts
+postgres_data/
+n8n_data/
+
+# Ignore OS metadata
+.DS_Store
+Thumbs.db

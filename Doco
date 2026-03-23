@@ -1,0 +1,58 @@
+Gemini said
+This is a great move. For a Data Engineer or BI Analyst role, the "code" is only half the job—the other half is proving you understand why you built it that way.
+
+Since you are the founder of Matzati.casa, this documentation serves as your "Technical Manifesto." Here is a professional breakdown of your local n8n + PostgreSQL architecture.
+
+Project: Containerized Property Lead Ingestion Pipeline
+Target Platform: Matzati.casa (Real Estate Automation)
+
+Architecture: Microservices-based (Docker)
+
+Stack: n8n, PostgreSQL 16, Docker Compose, PowerShell
+
+1. Infrastructure & Orchestration (The "Engine")
+We utilized Docker Compose to create a private, isolated network. This ensures the database is never exposed directly to the public internet, a key security practice.
+
+Key File: docker-compose.yml
+
+Services:
+
+db: A PostgreSQL 16 (Alpine-based) container for lightweight, high-performance data storage.
+
+n8n: The automation engine, linked to the db service via an internal Docker bridge.
+
+Recruiter Highlight: “I used Docker Compose to manage service discovery. Instead of hardcoding IP addresses, the services communicate using internal hostnames (db), making the infrastructure portable and scalable.”
+
+2. Security & Environment Management
+To follow industry-standard security protocols, we separated configuration from code using an .env file.
+
+Credential Masking: Database passwords (POSTGRES_PASSWORD) and usernames are stored in a hidden .env file, preventing sensitive data from being accidentally pushed to GitHub.
+
+Volume Persistence: We mapped local directories (C:\Users\liorj\Documents\n8n-app) to container volumes. This ensures that if the container crashes, no property data or n8n workflows are lost.
+
+Recruiter Highlight: “I implemented a ‘Zero-Knowledge’ security layer by using environment variables and local volumes, ensuring data persistence and credential safety.”
+
+3. Database Schema Design
+Using the docker exec command, we entered the Linux-based container environment to manually initialize the data warehouse.
+
+The Command: CREATE TABLE IF NOT EXISTS leads (...)
+
+Schema Logic: We defined a SERIAL PRIMARY KEY for unique lead tracking and a TIMESTAMP to monitor lead freshness—critical for the fast-paced Israeli rental market.
+
+Recruiter Highlight: “I manually verified the database handshake using the psql CLI inside Docker, proving my ability to manage the full data lifecycle from infrastructure to table definition.”
+
+4. API & Automation Logic (n8n)
+The "brain" of the operation is an n8n workflow that acts as a custom REST API.
+
+Webhook Listener: Configured to accept POST requests. This allows any external scraper or frontend to "push" data into the system.
+
+SQL Execution: Instead of using basic GUI inserts, we used Execute Query mode. This allows for advanced SQL logic (like duplicate prevention or data cleaning) directly within the automation.
+
+Recruiter Highlight: “I built a functional REST endpoint that transforms incoming JSON payloads into structured SQL data. This architecture is designed to handle asynchronous data streams from multiple property sources.”
+
+5. Verification & Testing
+We used PowerShell and Invoke-RestMethod to simulate real-world traffic.
+
+The Test: Sending a JSON body with a property_url to the local n8n webhook.
+
+The Result: A verified row in the PostgreSQL leads table, confirmed via SQL query.

@@ -1,0 +1,68 @@
+{
+  "name": "My workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "6dce8113-b001-4d65-9187-3152a0dff40f",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "711eb2a7-1f0d-4f64-9eb6-efe979b4bade",
+      "name": "Webhook",
+      "webhookId": "6dce8113-b001-4d65-9187-3152a0dff40f"
+    },
+    {
+      "parameters": {
+        "operation": "executeQuery",
+        "query": "INSERT INTO leads (property_url, source)\nVALUES ('{{ $json.body.url }}', 'n8n_automation')\nRETURNING id;",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        208,
+        0
+      ],
+      "id": "3d90367a-83f9-4b63-8216-b6c35e3631b0",
+      "name": "Execute a SQL query",
+      "credentials": {
+        "postgres": {
+          "id": "uZWXSvYbpTk7JORV",
+          "name": "Postgres account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook": {
+      "main": [
+        [
+          {
+            "node": "Execute a SQL query",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "c4f49d69-0420-444f-9e20-7b21fc7f6597",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "e6bdb959470d537c83db2506d7ef32d5d8798241365102d2abf0b83625e82913"
+  },
+  "id": "B0EMvQKyqtsJ0W01",
+  "tags": []
+}

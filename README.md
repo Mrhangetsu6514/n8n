@@ -1,44 +1,54 @@
-n8n Property Pipeline Infrastructure
-This repository contains the containerized infrastructure and automated data pipeline for Matzati.casa. It utilizes a microservices architecture to ingest, process, and persist real estate listing data from external sources into a structured PostgreSQL database.
+# 🚀 Automated Data Ingestion & Persistence Engine
+> **A Containerized Microservices Pipeline for Real-Time Lead Capture**
 
-🏗 System Architecture
-The system is orchestrated using Docker Compose, ensuring an isolated and secure environment where the automation engine and database communicate via a private virtual network.
+![n8n](https://img.shields.io/badge/n8n-FF6D5B?style=for-the-badge&logo=n8n&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-316192?style=for-the-badge&logo=postgresql&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Functional-brightgreen?style=for-the-badge)
 
-Automation Engine: n8n (Workflow Automation)
+## 📖 Overview
+This project demonstrates a production-ready **Extract, Load, Transform (ELT)** architecture. It provides a robust endpoint for capturing JSON-based lead data via Webhooks and persisting it into a structured PostgreSQL data warehouse. 
 
-Database: PostgreSQL 16 (Alpine-based)
+The entire stack is orchestrated via **Docker Compose**, emphasizing security, service isolation, and environment-agnostic deployment.
 
-Orchestration: Docker Compose
+---
 
-Interface: REST API / Webhooks
+## 🛠 Technical Architecture
+* **Container Orchestration:** [Docker Compose](https://docs.docker.com/compose/) manages the lifecycle of the automation and database layers.
+* **Logic Engine:** [n8n](https://n8n.io/) handles the asynchronous request-response cycle and SQL formatting.
+* **Storage Layer:** [PostgreSQL 16](https://www.postgresql.org/) provides relational data integrity with persistent volumes.
+* **Tooling:** PowerShell for infrastructure verification and `psql` for manual schema validation.
 
-📁 Repository Structure
-docker-compose.yml: Defines the multi-container environment, service networking, and volume persistence.
+---
 
-.gitignore: Configured to protect sensitive information (like .env files and local database storage).
+## 🏗 Engineering Highlights
+### 🔒 Network Isolation & Security
+- **Internal DNS:** Services communicate via a private Docker bridge. The database is shielded from external access, reachable only by the n8n container using the `db` hostname.
+- **Environment Abstraction:** Utilized `.env` files to decouple sensitive credentials from the codebase, adhering to the Twelve-Factor App methodology.
 
-Simple_webhook_SQL_query.json: The exported n8n workflow. This contains the logic for the Webhook listener and the SQL execution node.
+### 💾 Reliability & Scaling
+- **Stateful Persistence:** Configured host-to-container volume mapping, ensuring that lead data and workflow states survive container lifecycles and host reboots.
+- **Atomic Operations:** Utilized raw SQL execution nodes to handle data inserts, allowing for high-performance transactions and schema-specific logic.
 
-Data_sent_test_webhook2.JSON: Sample JSON payload used to verify the API handshake and schema compatibility.
+---
 
-Doco: Project documentation and process logs.
+## 📂 Repository Structure
+| File | Role |
+| :--- | :--- |
+| `docker-compose.yml` | Infrastructure-as-Code (IaC) configuration. |
+| `Simple_webhook_SQL_query.json` | Logic for the Webhook-to-SQL pipeline. |
+| `Data_sent_test_webhook2.JSON` | Production-spec payload example. |
+| `Doco` | Technical implementation logs. |
 
-🚀 Key Features & Engineering Highlights
-Service Discovery: Implemented internal Docker networking so that n8n identifies the database via the hostname db, rather than volatile IP addresses.
+---
 
-Data Persistence: Configured Docker Volumes to ensure that all property data and workflow configurations remain persistent across container restarts.
+## 🎯 Project Motivation
+As the founder of **Matzati.casa**, a property listing platform in Israel, I faced a significant technical hurdle: **Lead Fragmentation.**
 
-Infrastructure as Code (IaC): The entire environment can be deployed with a single command (docker-compose up -d), demonstrating a modern DevOps approach to data engineering.
+In a fast-moving real estate market, manual data entry is a bottleneck. I built this infrastructure to act as the "Central Nervous System" for our data ingestion. By moving away from manual spreadsheets and into a containerized SQL environment, we achieved:
+* **Real-time Synchronization:** Leads move from discovery to database in <1s.
+* **System Independence:** The platform can be moved from a local dev machine to a cloud VPS (AWS/DigitalOcean) without changing a single line of logic.
+* **Data Sovereignty:** By self-hosting our infrastructure via Docker, we maintain full control over our users' data and property insights.
 
-Security-First Design: Sensitive credentials are abstracted into environment variables, following industry best practices for configuration management.
-
-Manual Handshake Verification: Successfully verified database connectivity and schema integrity using psql via docker exec, ensuring a healthy "pipe" before enabling automation.
-
-🛠 Setup & Usage
-Clone the Repo: git clone https://github.com/Mrhangetsu6514/n8n.git
-
-Environment Setup: Create a .env file with your POSTGRES_USER, POSTGRES_PASSWORD, and POSTGRES_DB.
-
-Deploy: Run docker-compose up -d.
-
-Import Workflow: Import the Simple_webhook_SQL_query.json into your local n8n instance at localhost:5678.
+---
+*Created and maintained by the Matzati.casa Engineering Team.*
